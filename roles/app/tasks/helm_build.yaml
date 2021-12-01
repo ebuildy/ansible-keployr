@@ -1,0 +1,26 @@
+---
+
+- name: Build Chart.yaml
+  ansible.builtin.template:
+    src: "Chart.yaml.j2"
+    dest: "{{ helm_chart_path }}"
+    mode: '0644'
+
+- name: Build "values.yaml"
+  when: keployr_helm_values|length > 0
+  ansible.builtin.copy:
+    content: "{% if keployr_helm_values is string %}{{ keployr_helm_values }}{% else %}{{ keployr_helm_values | to_nice_yaml(2) }}{% endif %}"
+    dest: "{{ helm_values_path }}"
+    mode: '0644'
+
+# Folder "templates"
+- name: Check if folder "{{ helm_templates_src_path }}" exists
+  stat:
+    path: "{{ helm_templates_src_path }}"
+  register: chart_templates_stats
+
+- when: chart_templates_stats.stat.exists
+  name: Copy chart templates
+  copy:
+    src: "{{ helm_templates_src_path }}/."
+    dest: "{{ helm_templates_path }}"

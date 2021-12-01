@@ -1,0 +1,10 @@
+---
+
+- tags: ["never", "devop_build"]
+  block:
+  - include_tasks:
+      file: ci.yaml
+
+- name: Deploy to git project
+  tags: ["never", "git_deploy"]
+  import_tasks: git_deploy.yaml

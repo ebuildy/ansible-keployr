@@ -1,0 +1,5 @@
+From commit {{ lookup('env', 'CI_COMMIT_SHA') }} from {{ lookup('env', 'CI_PROJECT_URL') }}:
+"{{ lookup('env', 'CI_COMMIT_MESSAGE') }}"
+Job: {{ lookup('env', 'CI_JOB_ID') }}  ({{ lookup('env', 'CI_JOB_NAME') }}) - pipeline {{ lookup('env', 'CI_PIPELINE_ID') }}
+User: {{ lookup('env', 'GITLAB_USER_EMAIL') }}
+Project version: {{ keployr_deploy_version }}

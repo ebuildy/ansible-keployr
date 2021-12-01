@@ -1,0 +1,25 @@
+---
+
+##
+# Must define variable:
+#    keployr_devop_envs:
+#    - env: dev
+#      dns_suffix: ".testXXX.XXX.XXX"
+#      kube_cluster: dev_ny1
+#    - env: prod
+#      dns_suffix: ".prod-XXX.XXX.XXX"
+#      kube_cluster: prod_ny1
+#
+##
+
+- name: "CI > build README.MD"
+  when: readme_path != ''
+  template:
+    src: README.MD.j2
+    dest: "{{ readme_path }}"
+
+- name: "CI > build Makefile"
+  when: makefile_path != ''
+  template:
+    src: Makefile.j2
+    dest: "{{ makefile_path }}"

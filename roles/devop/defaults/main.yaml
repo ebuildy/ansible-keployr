@@ -1,0 +1,49 @@
+gitlab_ci_yaml_path: "{{ working_dir }}/.gitlab-ci.yml"
+readme_path: "{{ working_dir }}/README.MD"
+makefile_path: "{{ working_dir }}/Makefile"
+
+project_version: "{{ lookup('file', working_dir ~ '/VERSION') }}"
+
+build_dir: build
+
+##
+# artifacts source root dir
+##
+working_dir: "{{ lookup('env', 'PWD') }}"
+
+
+##
+# Full git URL (with scheme / auth credentials)
+##
+keployr_git_url: "{{ lookup('env', 'KEPLOYR_GIT_URL') }}"
+
+##
+# git branch to use (must exist!)
+##
+keployr_git_branch: "{{ lookup('env', 'KEPLOYR_GIT_BRANCH') | default('develop', True) }}"
+
+##
+# git user to configure
+##
+keployr_git_user: keployr
+keployr_git_user_email: keployr@gmail.com
+
+##
+# working dir (git clone destination)
+##
+keployr_tmp_project_dir: /tmp/__git__keployr__
+
+##
+# relative path to artifacts
+##
+keployr_git_deploy_src_path: "{{ lookup('env', 'KEPLOYR_GIT_DEPLOY_SRC_PATH') }}"
+
+keployr_git_deploy_dst_path: "{{ gitops_path_prefix }}"
+
+argocd_appset_filename: "{{ keployr_stack }}-apps.yaml"
+
+keployr_git_deploy_src_fullpath: "{{ build_dir }}"
+keployr_git_deploy_src_argocd_appset_fullpath: "{{ keployr_git_deploy_src_fullpath }}/{{ argocd_appset_filename }}"
+
+keployr_git_deploy_dst_fullpath: "{{ keployr_tmp_project_dir }}/{{ keployr_git_deploy_dst_path }}"
+keployr_git_deploy_dst_argocd_appset_fullpath: "{{ keployr_git_deploy_dst_fullpath }}/../argocd"

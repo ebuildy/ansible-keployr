@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ argocd_app_namespace }}
+  name: {{ argocd_app_name }}
+  labels:
+    keployr.io/division: {{ keployr_division }}
+    keployr.io/stack: {{ keployr_stack }}
+{% if keployr_component|length > 0 %}
+    keployr.io/component: {{ keployr_component }}
+{% endif %}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: "{{ argocd_project }}"
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: "{{ keployr_k8s_namespace }}"
+  source:
+    repoURL: "{{ argocd_repo_url }}"
+    targetRevision: "{{ argocd_repo_revision }}"
+    path: "{{ argocd_repo_path }}"
+    {% if keployr_argocd_plugin is defined -%}
+    plugin:
+      name: {{ keployr_argocd_plugin }}
+    {% endif -%}
+    {% if not keployr_build_as_manifests and (keployr_helm_charts|length > 0 or keployr_helm_values|length > 0) -%}
+    helm:
+      releaseName: "{{ keployr_release_name }}"
+    {% endif %}

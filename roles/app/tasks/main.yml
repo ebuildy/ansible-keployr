@@ -1,0 +1,50 @@
+---
+
+- name: Prepare directories
+  ansible.builtin.include_tasks: begin.yaml
+
+##
+# helm
+##
+- name: Build helm manifests
+  when: keployr_helm_charts|count > 0 or keployr_helm_values|count > 0
+  ansible.builtin.include_tasks: helm_build.yaml
+
+##
+# if we want raw YAML manifests
+##
+- name: Generate helm k8s yaml manifests
+  when: (keployr_helm_charts|count > 0 or keployr_helm_values|count > 0) and keployr_build_as_manifests
+  ansible.builtin.include_tasks: helm_generate_manifests.yaml
+
+##
+# argoCD
+##
+- name: argoCD app manifest
+  when: keployr_argocd_enabled
+  ansible.builtin.include_tasks: argocd_build_app.yaml
+
+##
+# extra kubernetes YAML manifests
+##
+- name: Check if folder "{{ keployr_src_manifests_dir }}" exists
+  stat:
+    path: "{{ keployr_src_manifests_dir }}"
+  register: extra_manifests_stats
+
+- when: extra_manifests_stats.stat.exists
+  ansible.builtin.include_tasks: extra_manifests.yaml
+
+##
+# kustomize
+##
+- name: kustomize
+  when: keployr_kustomize is defined
+  ansible.builtin.include_tasks: kustomize_build.yaml
+
+
+##
+# Cleaning
+##
+- name: end
+  ansible.builtin.include_tasks: end.yaml

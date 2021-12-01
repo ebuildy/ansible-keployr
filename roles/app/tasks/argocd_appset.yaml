@@ -1,0 +1,17 @@
+---
+
+- name: Check dir exist
+  tags: ["always"]
+  ansible.builtin.file:
+    path: "{{ argocd_appset_path | dirname }}"
+    state: directory
+
+- name: Build argoCD app.yaml
+  tags: ["always"]
+  ansible.builtin.template:
+    src: "argocd_app.yaml.j2"
+    dest: "{{ argocd_appset_path }}"
+    mode: '0644'
+  vars:
+    argocd_repo_path: "{{ gitops_path_prefix }}/{{ argocd_apps_dirname }}"
+    argocd_app_name: "{{ keployr_fullname }}-apps"

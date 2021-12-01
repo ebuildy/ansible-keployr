@@ -1,0 +1,63 @@
+---
+
+- name: Check
+  ansible.builtin.assert:
+    that:
+    - keployr_git_url != ""
+    fail_msg: "You must set KEPLOYR_GIT_URL env variable!"
+
+- name: Clear dir
+  ansible.builtin.file:
+    path: "{{ keployr_tmp_project_dir }}"
+    state: absent
+    force: yes
+
+- name: "git clone -b {{ keployr_git_branch }} {{ keployr_git_url }} {{ keployr_tmp_project_dir }}"
+  ansible.builtin.shell:
+    cmd: |
+      git config --global user.email "{{ keployr_git_user_email }}"
+      git config --global user.name "{{ keployr_git_user }}"
+      git clone -b {{ keployr_git_branch }} {{ keployr_git_url }} {{ keployr_tmp_project_dir }}
+  register: clone_ret
+
+- debug: msg="{{ clone_ret.stdout }}"
+
+- name: Clean and create {{ keployr_git_deploy_dst_fullpath }} directory
+  ansible.builtin.file:
+    path: "{{ keployr_git_deploy_dst_fullpath }}"
+    state: "{{ item }}"
+  loop: ["absent", "directory"]
+
+- name: Exist or create argoCD appSet {{ keployr_git_deploy_dst_argocd_appset_fullpath }} directory
+  file:
+    path: "{{ keployr_git_deploy_dst_argocd_appset_fullpath }}"
+    state: directory
+
+- name: Copy files from {{ keployr_git_deploy_src_fullpath }}, {{ keployr_git_deploy_src_argocd_appset_fullpath }}
+  ansible.builtin.shell:
+    cmd: |
+      [ -d "{{ keployr_git_deploy_src_fullpath }}" ] && cp -r {{ keployr_git_deploy_src_fullpath }}/. {{ keployr_git_deploy_dst_fullpath }}
+      [ -f "{{ keployr_git_deploy_src_argocd_appset_fullpath }}" ] && mv {{ keployr_git_deploy_src_argocd_appset_fullpath }} {{ keployr_git_deploy_dst_argocd_appset_fullpath }}/
+      exit 0
+  register: copy_ret
+
+- debug: msg="{{ copy_ret.stdout }}"
+- debug: msg="{{ copy_ret.stderr }}"
+
+- name: Add note.md
+  template:
+    src: notes.md.j2
+    dest: "{{ keployr_git_deploy_dst_fullpath }}/notes.md"
+
+- name: Commit & push
+  ansible.builtin.shell:
+    cmd: |
+      git add .
+      git status
+      git commit -am "Update stack {{ keployr_stack }} - {{ keployr_deploy_version }} - {{ lookup('env', 'CI_COMMIT_SHORT_SHA') }}"
+      git push origin {{ keployr_git_branch }}
+    chdir: "{{ keployr_tmp_project_dir }}"
+  register: push_ret
+
+- debug: msg="{{ push_ret.stdout }}"
+- debug: msg="{{ push_ret.stderr }}"

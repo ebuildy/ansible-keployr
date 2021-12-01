@@ -1,0 +1,19 @@
+namespace: ebuildy
+name: keployr
+version: 1.0.0
+readme: README.md
+authors:
+- Thomas Decaux <ebuildy@gmail.com>
+description: |
+  Tasks to create Helm release files, argoCD app manifest.
+license_file: LICENSE
+tags:
+- kubernetes
+- helm
+- argocd
+repository: https://github.com/ebuildy/ansible-keployr
+documentation: https://github.com/ebuildy/ansible-keployr
+homepage: https://github.com/ebuildy/ansible-keployr
+issues: https://github.com/ebuildy/ansible-keployr/issues
+build_ignore:
+- ./cidre.yaml
