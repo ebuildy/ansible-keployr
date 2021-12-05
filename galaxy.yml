@@ -1,6 +1,6 @@
 namespace: ebuildy
 name: keployr
-version: 1.0.1
+version: 1.0.2
 readme: README.md
 authors:
 - Thomas Decaux <ebuildy@gmail.com>
@@ -17,3 +17,4 @@ homepage: https://github.com/ebuildy/ansible-keployr
 issues: https://github.com/ebuildy/ansible-keployr/issues
 build_ignore:
 - ./cidre.yaml
+- ./Makefile
