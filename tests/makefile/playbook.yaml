@@ -1,0 +1,66 @@
+---
+
+- hosts: ["localhost"]
+
+  vars:
+    keployr_division: ebuildy
+    keployr_stack: keployr
+    keployr_devop:
+      envs:
+      - name: dev
+        dns_suffix: ".dev"
+        vars_file: dev.yaml
+      - name: prod
+        dns_suffix: ".prod"
+        vars_file: prod.yaml
+      actions:
+      - name: Clean
+        tags: clean
+      - name: build
+        actions:
+        - zeppelin.build
+        - argocd_apps.build
+      services:
+      - name: devop
+        actions:
+        - name: makefile
+          tags: devop_build,makefile
+        - name: deploy
+          tags: git_deploy
+      - name: zeppelin
+        actions:
+        - name: build
+          tags: zeppelin,server
+        urls:
+        - ingress: zep
+      - name: argocd_apps
+        actions:
+        - name: build
+          tags: argocd_apps
+
+  tasks:
+  - name: Generate makefile and readme
+    tags: ["devop_build"]
+    include_role:
+      name: "../../roles/devop"
+    vars: {}
+
+  - tags: ["always"]
+    block:
+    - ansible.builtin.stat: {path: ./Makefile}
+      register: gMakefile
+    - ansible.builtin.stat: {path: ./match/Makefile}
+      register: mMakefile
+
+  - tags: ["always"]
+    name: assert generated files are ok
+    assert:
+      that:
+      - gMakefile.stat.checksum == mMakefile.stat.checksum
+
+  post_tasks:
+  
+  - tags: ["always"]
+    name: cleaning
+    ansible.builtin.file: { path: "{{ item }}" , state: absent}
+    with_items: ["Makefile", "README.MD"]
