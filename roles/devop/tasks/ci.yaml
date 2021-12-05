@@ -23,3 +23,6 @@
   template:
     src: Makefile.j2
     dest: "{{ makefile_path }}"
+  vars:
+    mk_rules_prefix: keployr/
+    mk_rules_svc_prefix: "{{ mk_rules_prefix }}svc/"
