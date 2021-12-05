@@ -1,7 +1,7 @@
 # {{ keployr_division }} / {{ keployr_stack }}
 
-{% for env in keployr_devop_envs %}
-## Stacks - {{ env.env | upper }}
+{% for env in keployr_devop.envs %}
+## Stacks - {{ env.name | upper }}
 
 {% if infra.stacks is defined %}
 {% for stack in infra.stacks %}
