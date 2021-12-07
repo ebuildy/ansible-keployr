@@ -33,3 +33,11 @@ def test_devop_deploy():
         print(p.stdout.read())
         
         assert retval == 0
+        
+def test_app_build():
+    with tempfile.TemporaryDirectory() as tmpDir:
+        p = subprocess.Popen(f"ansible-playbook --extra-vars kp_build_dir={tmpDir} -t build {current_dir}/app/playbook.yaml", shell=True, stdout=subprocess.PIPE)
+        retval = p.wait()
+        print(p.stdout.read())
+        
+        assert retval == 0

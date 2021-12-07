@@ -1,7 +1,7 @@
 apiVersion: v2
 name: {{ keployr_stack }}-{{ keployr_component }}
 type: application
-version: {{ keployr_deploy_version }}
+version: {{ kp_component_version }}
 {% if keployr_helm_charts|length > 0 -%}
 dependencies:
 {{ keployr_helm_charts | to_nice_yaml }}
