@@ -14,4 +14,4 @@
     mode: '0644'
   vars:
     argocd_source_path: "{{ kp_stack_build_dir }}"
-    argocd_app_name: "{{ keployr_fullname }}-apps"
+    argocd_app_name: "{{ kp_fullname }}-apps"

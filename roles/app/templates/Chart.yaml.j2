@@ -1,8 +1,8 @@
 apiVersion: v2
-name: {{ keployr_stack }}-{{ keployr_component }}
+name: {{ kp_stack }}-{{ kp_component }}
 type: application
 version: {{ kp_component_version }}
-{% if keployr_helm_charts|length > 0 -%}
+{% if kp_helm_charts|length > 0 -%}
 dependencies:
-{{ keployr_helm_charts | to_nice_yaml }}
+{{ kp_helm_charts | to_nice_yaml }}
 {% endif -%}

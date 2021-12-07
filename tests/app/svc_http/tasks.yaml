@@ -6,8 +6,8 @@
     apply: { tags: ["always"] }
   tags: ["always"]
   vars:
-    keployr_argocd_enabled: true
-    keployr_build_as_manifests: false
-    keployr_helm_values:
+    kp_argocd_enabled: true
+    kp_build_as_manifests: false
+    kp_helm_values:
       hello: world
-    keployr_helm_charts: []
+    kp_helm_charts: []

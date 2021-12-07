@@ -2,7 +2,7 @@
 
 ##
 # Must define variable:
-#    keployr_devop_envs:
+#    kp_devop_envs:
 #    - env: dev
 #      dns_suffix: ".testXXX.XXX.XXX"
 #      kube_cluster: dev_ny1
@@ -14,9 +14,9 @@
 
 - name: "Open env vars file"
   include_vars:
-    file: "{{ keployr_vars_file_dir }}{{ item }}.{{ keployr_vars_file_extension }}"
+    file: "{{ kp_vars_file_dir }}{{ item }}.{{ kp_vars_file_extension }}"
     name: "env_{{ item }}"
-  with_items: "{{ keployr_devop.envs }}"
+  with_items: "{{ kp_devop.envs }}"
 
 
 - name: "CI > build README.MD"

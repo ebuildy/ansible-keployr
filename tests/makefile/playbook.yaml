@@ -4,9 +4,9 @@
 
   vars:
     kp_build_dir: "/tmp"
-    keployr_division: ebuildy
-    keployr_stack: keployr
-    keployr_devop:
+    kp_division: ebuildy
+    kp_stack: keployr
+    kp_devop:
       envs:
       - dev
       - prod

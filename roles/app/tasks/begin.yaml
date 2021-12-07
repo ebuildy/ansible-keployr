@@ -13,6 +13,6 @@
     path: "{{ item }}"
     state: directory
   loop:
-  - "{{ keployr_build_manifests_dir }}"
-  - "{{ keployr_build_helm_dir }}"
-  - "{{ keployr_build_kustomize_dir }}"
+  - "{{ kp_build_manifests_dir }}"
+  - "{{ kp_build_helm_dir }}"
+  - "{{ kp_build_kustomize_dir }}"

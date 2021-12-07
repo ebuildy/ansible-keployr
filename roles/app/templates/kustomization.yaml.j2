@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-{% for file in keployr_kustomize_resources.files %}
+{% for file in kp_kustomize_resources.files %}
 - _wip_manifests/{{ file.path | basename }}
 {% endfor %}
-{{ keployr_kustomize | to_yaml(default_style='|') }}
+{{ kp_kustomize | to_yaml(default_style='|') }}

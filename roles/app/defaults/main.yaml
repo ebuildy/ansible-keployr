@@ -3,12 +3,12 @@
 ##
 # working dir to build stuff
 ##
-kp_build_dir: "./build/{{ keployr_env }}"
+kp_build_dir: "./build/{{ kp_env }}"
 
 ##
 # kubernetes namespace
 ##
-keployr_k8s_namespace: "default"
+kp_k8s_namespace: "default"
 
 ################################################################################
 ## keployr division / stack / component
@@ -17,37 +17,37 @@ keployr_k8s_namespace: "default"
 ##
 # Division name
 ##
-keployr_division: ""
+kp_division: ""
 
 ##
 # Stack name
 ##
-keployr_stack: ""
+kp_stack: ""
 
 ##
 # Define component name (eg: "elasticsearch" , "logstash" ) = folder name
 ##
-keployr_component: ""
+kp_component: ""
 
 ##
 # Component fullname
 ##
-kp_stack_fullname: "{{ keployr_division }}-{{ keployr_stack }}"
+kp_stack_fullname: "{{ kp_division }}-{{ kp_stack }}"
 
 ##
 # relative stack path
 ##
-kp_stack_build_dir: "{{ keployr_env }}/{{ keployr_stack }}"
+kp_stack_build_dir: "{{ kp_env }}/{{ kp_stack }}"
 
 ##
 # full path of component source
 ##
-kp_component_src_dir: "./{{ keployr_component | lower | lower }}"
+kp_component_src_dir: "./{{ kp_component | lower | lower }}"
 
 ##
 # where file are generated
 ##
-kp_component_build_dir: "{{ kp_stack_build_dir }}/{{ keployr_component }}"
+kp_component_build_dir: "{{ kp_stack_build_dir }}/{{ kp_component }}"
 
 ##
 # for helm chart definition
@@ -57,14 +57,14 @@ kp_component_version: "v0.0.1"
 ##
 # full component name
 ##
-kp_component_fullname: "{{ keployr_division }}-{{ keployr_stack }}-{{ keployr_component }}"
+kp_component_fullname: "{{ kp_division }}-{{ kp_stack }}-{{ kp_component }}"
 
 ##
 # relative component path
 ##
-kp_component_gitops_path: "{{ kp_stack_build_dir }}/{{ keployr_component | lower }}"
+kp_component_gitops_path: "{{ kp_stack_build_dir }}/{{ kp_component | lower }}"
 
-keployr_fullname: "{{ (keployr_component == '') | ternary(kp_stack_fullname, kp_component_fullname) }}"
+kp_fullname: "{{ (kp_component == '') | ternary(kp_stack_fullname, kp_component_fullname) }}"
 
 ################################################################################
 ## gitops
@@ -73,7 +73,7 @@ keployr_fullname: "{{ (keployr_component == '') | ternary(kp_stack_fullname, kp_
 ##
 # Generate argoCD app manifest files.
 ##
-keployr_argocd_enabled: false
+kp_argocd_enabled: false
 
 ##
 # Constants
@@ -82,10 +82,10 @@ keployr_argocd_enabled: false
 ##
 # apps definition gitops dirname
 ##
-keployr_gitops_apps_dirname: gitops-apps
+kp_gitops_apps_dirname: gitops-apps
 
-kp_build_gitops_apps_dir: "{{ kp_build_dir }}/{{ keployr_gitops_apps_dirname }}"
-argocd_appset_filename: "{{ keployr_stack }}-apps.yaml"
+kp_build_gitops_apps_dir: "{{ kp_build_dir }}/{{ kp_gitops_apps_dirname }}"
+argocd_appset_filename: "{{ kp_stack }}-apps.yaml"
 argocd_appset_path: "{{ kp_build_dir }}/{{ argocd_appset_filename }}"
 
 ##
@@ -94,7 +94,7 @@ argocd_appset_path: "{{ kp_build_dir }}/{{ argocd_appset_filename }}"
 argocd_project: ""
 argocd_repo_url: ""
 argocd_repo_revision: develop
-argocd_app_name: "{{ keployr_fullname }}"
+argocd_app_name: "{{ kp_fullname }}"
 argocd_app_namespace: argocd
 
 ################################################################################
@@ -104,7 +104,7 @@ argocd_app_namespace: argocd
 ##
 # Define Helm charts list.
 ##
-keployr_helm_charts: []
+kp_helm_charts: []
 # - name: logstash
 #  repository: elastic
 #  version: 7.14.1
@@ -113,24 +113,24 @@ keployr_helm_charts: []
 # Define Helm values.yaml data.
 # Object or String
 ##
-keployr_helm_values: {}
+kp_helm_values: {}
 
 ##
 # Helm release name (override argoCD app name)
 ##
-keployr_release_name: "{{ keployr_stack }}-{{ keployr_component }}"
+kp_release_name: "{{ kp_stack }}-{{ kp_component }}"
 
 ##
 # Constants
 ##
 helm_values_filename: values.yaml
-helm_values_path: "{{ keployr_build_helm_dir }}/{{ helm_values_filename }}"
+helm_values_path: "{{ kp_build_helm_dir }}/{{ helm_values_filename }}"
 
 helm_chart_filename: Chart.yaml
-helm_chart_path: "{{ keployr_build_helm_dir }}/{{ helm_chart_filename }}"
+helm_chart_path: "{{ kp_build_helm_dir }}/{{ helm_chart_filename }}"
 
 helm_templates_dirname: templates
-helm_templates_path: "{{ keployr_build_helm_dir }}/{{ helm_templates_dirname }}"
+helm_templates_path: "{{ kp_build_helm_dir }}/{{ helm_templates_dirname }}"
 helm_templates_src_dirname: helm_templates
 helm_templates_src_path: "{{ kp_component_src_dir }}/{{ helm_templates_src_dirname }}"
 
@@ -143,29 +143,29 @@ helm_debug_templates_dirname: _helm_templates
 ##
 # Generate raw YAML manifest files.
 ##
-keployr_build_as_manifests: false
+kp_build_as_manifests: false
 
 ##
 # Generate a single raw YAML manifest "all" file.
 ##
-keployr_build_as_manifests_single_file: false
+kp_build_as_manifests_single_file: false
 
 ##
 # where magic happen (kustomize / helm generation if needed)
 ##
-keployr_build_helm_dir: "{{ kp_component_build_dir }}/_wip_helm"
+kp_build_helm_dir: "{{ kp_component_build_dir }}/_wip_helm"
 
 ##
 # where magic happen (kustomize / helm generation if needed)
 ##
-keployr_build_manifests_dir: "{{ kp_component_build_dir }}/_wip_manifests"
+kp_build_manifests_dir: "{{ kp_component_build_dir }}/_wip_manifests"
 
 ##
 # where extra manifest are located.
 ##
-keployr_src_manifests_dir: "{{ kp_component_src_dir }}/extra_manifests"
+kp_src_manifests_dir: "{{ kp_component_src_dir }}/extra_manifests"
 
 ##
 # for kustomize
 ##
-keployr_build_kustomize_dir: "{{ kp_component_build_dir }}/_wip_kustomize"
+kp_build_kustomize_dir: "{{ kp_component_build_dir }}/_wip_kustomize"

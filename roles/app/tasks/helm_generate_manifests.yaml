@@ -3,24 +3,24 @@
 -
   name: Helm dependency
   shell:
-    chdir: "{{ keployr_build_helm_dir }}"
+    chdir: "{{ kp_build_helm_dir }}"
     cmd: helm dependency build
 
 -
   name: Helm template
   environment:
-    HELM_NAMESPACE: "{{ keployr_k8s_namespace }}"
+    HELM_NAMESPACE: "{{ kp_k8s_namespace }}"
   shell:
-    chdir: "{{ keployr_build_helm_dir }}"
-    cmd: helm template {{ keployr_release_name }} . > all.yaml
+    chdir: "{{ kp_build_helm_dir }}"
+    cmd: helm template {{ kp_release_name }} . > all.yaml
 
 -
   name: Copy all.yaml
-  when: keployr_build_as_manifests_single_file
+  when: kp_build_as_manifests_single_file
   copy:
-    dest: "{{ keployr_build_manifests_dir }}/all.yaml"
-    content: "{{ lookup('file', keployr_build_helm_dir ~ '/all.yaml') }}"
+    dest: "{{ kp_build_manifests_dir }}/all.yaml"
+    content: "{{ lookup('file', kp_build_helm_dir ~ '/all.yaml') }}"
 
 -
-  when: not keployr_build_as_manifests_single_file
+  when: not kp_build_as_manifests_single_file
   ansible.builtin.include_tasks: helm_generate_manifests_multi.yaml

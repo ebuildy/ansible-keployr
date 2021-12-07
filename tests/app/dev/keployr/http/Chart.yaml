@@ -1,0 +1,4 @@
+apiVersion: v2
+name: keployr-http
+type: application
+version: v0.0.1

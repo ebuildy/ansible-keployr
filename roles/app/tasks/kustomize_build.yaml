@@ -3,8 +3,8 @@
 -
   name: Get resource files
   find:
-    paths: "{{ keployr_build_manifests_dir }}"
-  register: keployr_kustomize_resources
+    paths: "{{ kp_build_manifests_dir }}"
+  register: kp_kustomize_resources
 -
   name: Build kustomization.yaml
   ansible.builtin.template:
@@ -13,18 +13,18 @@
     mode: '0644'
 -
   name: Run kustomize
-  when: keployr_build_as_manifests
+  when: kp_build_as_manifests
   shell:
-    cmd: kustomize build {{ kp_component_build_dir }} -o {{ keployr_build_kustomize_dir }}/all.yaml
+    cmd: kustomize build {{ kp_component_build_dir }} -o {{ kp_build_kustomize_dir }}/all.yaml
 -
   name: Clean manifest dir
-  when: keployr_build_as_manifests
+  when: kp_build_as_manifests
   shell:
-    cmd: "rm {{ keployr_build_manifests_dir }}/*; rm {{ kp_component_build_dir }}/kustomization.yaml;"
+    cmd: "rm {{ kp_build_manifests_dir }}/*; rm {{ kp_component_build_dir }}/kustomization.yaml;"
 -
   name: Explode all.yaml
-  when: keployr_build_as_manifests
-  loop: "{{ lookup('file', keployr_build_kustomize_dir ~ '/all.yaml') | from_yaml_all }}"
+  when: kp_build_as_manifests
+  loop: "{{ lookup('file', kp_build_kustomize_dir ~ '/all.yaml') | from_yaml_all }}"
   copy:
-    dest: "{{ keployr_build_manifests_dir }}/{{ '%s-%s.yaml' % (item.metadata.name | lower, item.kind | lower) }}"
+    dest: "{{ kp_build_manifests_dir }}/{{ '%s-%s.yaml' % (item.metadata.name | lower, item.kind | lower) }}"
     content: "{{ item | to_nice_yaml }}"

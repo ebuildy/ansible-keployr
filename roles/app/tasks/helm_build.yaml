@@ -7,9 +7,9 @@
     mode: '0644'
 
 - name: Build "values.yaml"
-  when: keployr_helm_values|length > 0
+  when: kp_helm_values|length > 0
   ansible.builtin.copy:
-    content: "{% if keployr_helm_values is string %}{{ keployr_helm_values }}{% else %}{{ keployr_helm_values | to_nice_yaml(2) }}{% endif %}"
+    content: "{% if kp_helm_values is string %}{{ kp_helm_values }}{% else %}{{ kp_helm_values | to_nice_yaml(2) }}{% endif %}"
     dest: "{{ helm_values_path }}"
     mode: '0644'
 

@@ -9,7 +9,7 @@ KEPLOYR_FILE ?= "./src/keployr.yaml"
 KEPLOYR_TAGS ?= ""
 
 # Default env name
-KEPLOYR_ENV ?= {{ keployr_devop.envs[0] }}
+KEPLOYR_ENV ?= {{ kp_devop.envs[0] }}
 
 comma:= ,
 
@@ -20,9 +20,9 @@ endef
 ###
 # open URL
 ###
-{% for env in keployr_devop.envs %}
+{% for env in kp_devop.envs %}
 {% set host_suffix = lookup('vars', 'env_' ~ env ).env_ingress_host_suffix %}
-{% for service in keployr_devop.services %}
+{% for service in kp_devop.services %}
 {% if service.urls is defined %}
 {% for url in service.urls %}
 .PHONY: {{ mk_rules_prefix }}{{ env }}/{{ service.name | lower | replace(' ', '-') }}/url-{{ url.ingress }}
@@ -38,8 +38,8 @@ endef
 ###
 # main actions
 ###
-{% if keployr_devop.actions is defined %}
-{% for action in keployr_devop.actions %}
+{% if kp_devop.actions is defined %}
+{% for action in kp_devop.actions %}
 .PHONY: {{ mk_rules_prefix }}{{ action.name | lower | replace(' ', '-') }}
 {{ mk_rules_prefix }}{{ action.name | lower | replace(' ', '-') }}: {% if action.actions is defined %}{% for sub_action in action.actions %}{{ mk_rules_svc_prefix }}{{ sub_action | replace('.', '/') }} {% endfor %}{% endif %}
 
@@ -53,7 +53,7 @@ endef
 ###
 # services
 ###
-{% for service in keployr_devop.services %}
+{% for service in kp_devop.services %}
 {% if service.actions is defined %}
 {% for action in service.actions %}
 .PHONY: {{ mk_rules_svc_prefix }}{{ service.name | lower | replace(' ', '-') }}/{{ action.name | lower | replace(' ', '-') }}

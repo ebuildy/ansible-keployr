@@ -8,22 +8,22 @@ include:
   file: gitlab-ci-keployr.yml
 
 stages:
-- {{ keployr_stack.name | lower | replace(' ', '-') }}
-{% for service in keployr_stack.services -%}
-- {{ keployr_stack.name | lower | replace(' ', '-') }}-{{ service.name | lower | replace(' ', '-') }}
+- {{ kp_stack.name | lower | replace(' ', '-') }}
+{% for service in kp_stack.services -%}
+- {{ kp_stack.name | lower | replace(' ', '-') }}-{{ service.name | lower | replace(' ', '-') }}
 {% endfor -%}
 
-{% for service in keployr_stack.services %}
+{% for service in kp_stack.services %}
 {% if service.actions is defined %}
 # ------------------------------------------------------------------------------
-# Stack "{{ keployr_stack.name }}" > Service "{{ service.name }}"
+# Stack "{{ kp_stack.name }}" > Service "{{ service.name }}"
 # ------------------------------------------------------------------------------
 {% for action in service.actions %}
 .{{ service.name | lower | replace(' ', '-') }}-{{ action.name | lower | replace(' ', '-') }}:
   extends:
   - .keployr
   - .when_manual
-  stage: {{ keployr_stack.name | lower | replace(' ', '-') }}-{{ service.name | lower | replace(' ', '-') }}
+  stage: {{ kp_stack.name | lower | replace(' ', '-') }}-{{ service.name | lower | replace(' ', '-') }}
   dependencies: []
   variables:
     KEPLOYR_TAGS: "{{ action.tags }}"
@@ -39,17 +39,17 @@ stages:
 # env: {{ env | upper }}
 # ------------------------------------------------------------------------------
 
-{% if keployr_stack.actions is defined %}
-{% for action in keployr_stack.actions %}
+{% if kp_stack.actions is defined %}
+{% for action in kp_stack.actions %}
 
-{{ env.env }}-{{ keployr_stack.name | lower | replace(' ', '-') }}-{{ action.name | lower | replace(' ', '-') }}:
+{{ env.env }}-{{ kp_stack.name | lower | replace(' ', '-') }}-{{ action.name | lower | replace(' ', '-') }}:
   extends:
   - .keployr
   - .when_manual
   - .env_{{ env.env }}
   environment:
-    name: {{ env.env }}/{{ keployr_stack.name | lower | replace(' ', '-')}}
-  stage: {{ keployr_stack.name | lower | replace(' ', '-') }}
+    name: {{ env.env }}/{{ kp_stack.name | lower | replace(' ', '-')}}
+  stage: {{ kp_stack.name | lower | replace(' ', '-') }}
   dependencies: []
 {% if action.tags is defined %}
   variables:
@@ -63,10 +63,10 @@ stages:
 {% endfor %}
 {% endif %}
 
-{% for service in keployr_stack.services %}
+{% for service in kp_stack.services %}
 {% if service.actions is defined %}
 # ------------------------------------------------------------------------------
-# Stack "{{ keployr_stack.name }}" > Service "{{ service.name }}"
+# Stack "{{ kp_stack.name }}" > Service "{{ service.name }}"
 # ------------------------------------------------------------------------------
 {% for action in service.actions %}
 
@@ -75,7 +75,7 @@ stages:
   - .{{ service.name | lower | replace(' ', '-') }}-{{ action.name | lower | replace(' ', '-') }}
   - .env_{{ env.env }}
   environment:
-    name: {{ env.env }}/{{ keployr_stack.name | lower | replace(' ', '-') }}/{{ service.name | lower | replace(' ', '-') }}
+    name: {{ env.env }}/{{ kp_stack.name | lower | replace(' ', '-') }}/{{ service.name | lower | replace(' ', '-') }}
     {% if service.urls is defined %}url: https://{{ service.urls[0].ingress }}{{ env.dns_suffix }}{% endif %}
 
 {% endfor %}

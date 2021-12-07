@@ -1,21 +1,21 @@
 ---
 
 - name: Copy raw manifests
-  when: keployr_build_as_manifests
+  when: kp_build_as_manifests
   shell:
-    cmd: "mv {{ keployr_build_manifests_dir }}/* {{ kp_component_build_dir }}/"
+    cmd: "mv {{ kp_build_manifests_dir }}/* {{ kp_component_build_dir }}/"
 
 - name: Copy Helm resources
-  when: not keployr_build_as_manifests
+  when: not kp_build_as_manifests
   ignore_errors: yes
   shell:
-    cmd: "mv {{ keployr_build_helm_dir }}/* {{ kp_component_build_dir }}/"
+    cmd: "mv {{ kp_build_helm_dir }}/* {{ kp_component_build_dir }}/"
 
 - name: Cleaning WIP folders
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   loop:
-  - "{{ keployr_build_manifests_dir }}"
-  - "{{ keployr_build_helm_dir }}"
-  - "{{ keployr_build_kustomize_dir }}"
+  - "{{ kp_build_manifests_dir }}"
+  - "{{ kp_build_helm_dir }}"
+  - "{{ kp_build_kustomize_dir }}"

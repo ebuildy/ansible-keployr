@@ -2,7 +2,7 @@
 
 -
   name: Explode all.yaml
-  loop: "{{ lookup('file', keployr_build_helm_dir ~ '/all.yaml') | from_yaml_all }}"
+  loop: "{{ lookup('file', kp_build_helm_dir ~ '/all.yaml') | from_yaml_all }}"
   copy:
-    dest: "{{ keployr_build_manifests_dir }}/{{ '%s-%s.yaml' % (item.metadata.name | lower, item.kind | lower) }}"
+    dest: "{{ kp_build_manifests_dir }}/{{ '%s-%s.yaml' % (item.metadata.name | lower, item.kind | lower) }}"
     content: "{{ item | to_nice_yaml }}"

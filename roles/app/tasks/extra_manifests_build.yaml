@@ -4,6 +4,6 @@
   name: Copy extra YAML manifests
   ansible.builtin.template:
     src: "{{ item }}"
-    dest: "{{ keployr_build_manifests_dir }}/{{ item | basename }}"
+    dest: "{{ kp_build_manifests_dir }}/{{ item | basename }}"
   with_fileglob:
-  - "{{ keployr_src_manifests_dir }}/*"
+  - "{{ kp_src_manifests_dir }}/*"

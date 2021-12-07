@@ -3,9 +3,9 @@
 - hosts: ["localhost"]
 
   vars:
-    keployr_division: ebuildy
-    keployr_stack: keployr
-    keployr_env: dev
+    kp_division: ebuildy
+    kp_stack: keployr
+    kp_env: dev
 
     kp_build_dir: "{{ lookup('env', 'PWD') }}/build/{{ env_name }}"
 
@@ -14,12 +14,12 @@
     tags: ["always"]
     include_tasks: ./svc_http/tasks.yaml
     vars:
-      keployr_component: http
+      kp_component: http
       kp_component_src_dir: ./svc_http
 
   - name: Service DB
     tags: ["always"]
     include_tasks: ./svc_db/tasks.yaml
     vars:
-      keployr_component: db
+      kp_component: db
       kp_component_src_dir: ./svc_db

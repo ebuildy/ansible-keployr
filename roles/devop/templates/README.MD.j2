@@ -1,6 +1,6 @@
-# {{ keployr_division }} / {{ keployr_stack }}
+# {{ kp_division }} / {{ kp_stack }}
 
-{% for env in keployr_devop.envs %}
+{% for env in kp_devop.envs %}
 {% set envVars = lookup('vars', 'env_' + env ) %}
 {% set host_suffix = envVars.env_ingress_host_suffix %}
 ## Stacks - {{ env | upper }}
@@ -20,7 +20,7 @@
 
 | Service | URLs |
 | ------- | ---- |
-{% for service in keployr_devop.services %}
+{% for service in kp_devop.services %}
 | {{ service.name }} | {% if service.urls is defined %}{% for url in service.urls %}* [https://{{ url.ingress }}{{ host_suffix }}](https://{{ url.ingress }}{{ host_suffix }}){% if loop.index < loop.length %}<br>{% endif %}{% endfor %}{% endif %} |
 {% endfor %}
 

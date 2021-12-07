@@ -18,12 +18,12 @@ project_version: "{{ lookup('file', working_dir ~ '/VERSION') }}"
 ##
 # default extension for vars_file
 ##
-keployr_vars_file_extension: "yaml"
+kp_vars_file_extension: "yaml"
 
 ##
 # dir for vars_file
 ##
-keployr_vars_file_dir: ""
+kp_vars_file_dir: ""
 
 ##
 # artifacts source root dir
@@ -34,58 +34,58 @@ working_dir: "{{ lookup('env', 'PWD') }}"
 ##
 # Full git URL (with scheme / auth credentials)
 ##
-keployr_git_url: "{{ lookup('env', 'KEPLOYR_GIT_URL') }}"
+kp_git_url: "{{ lookup('env', 'KEPLOYR_GIT_URL') }}"
 
 ##
 # git branch to use (must exist!)
 ##
-keployr_git_branch: "{{ lookup('env', 'KEPLOYR_GIT_BRANCH') | default('develop', True) }}"
+kp_git_branch: "{{ lookup('env', 'KEPLOYR_GIT_BRANCH') | default('develop', True) }}"
 
 ##
 # git user to configure
 ##
-keployr_git_user: ""
-keployr_git_user_email: ""
-keployr_git_commit_message: "Update stack {{ keployr_stack }} - {{ lookup('env', 'CI_COMMIT_SHORT_SHA') }}"
+kp_git_user: ""
+kp_git_user_email: ""
+kp_git_commit_message: "Update stack {{ kp_stack }} - {{ lookup('env', 'CI_COMMIT_SHORT_SHA') }}"
 
 ##
 # working dir (git clone destination)
 ##
-keployr_tmp_project_dir: "{{ kp_tmp_dir }}/keployr_deploy"
+kp_tmp_project_dir: "{{ kp_tmp_dir }}/kp_deploy"
 
 
 ##
 # relative destination path
 ##
-keployr_dst_path: "{{ keployr_env }}/{{ keployr_stack }}"
+kp_dst_path: "{{ kp_env }}/{{ kp_stack }}"
 
 ##
 # apps definition gitops dirname
 ##
-keployr_gitops_apps_dirname: gitops-apps
+kp_gitops_apps_dirname: gitops-apps
 
 ##
 # relative destination path of gitops apps
 ##
-keployr_gitops_apps_dst_path: "{{ keployr_env }}/{{ keployr_gitops_apps_dirname }}"
+kp_gitops_apps_dst_path: "{{ kp_env }}/{{ kp_gitops_apps_dirname }}"
 
 ##
 # gitops apps manifest filename
 ##
-keployr_gitops_apps_filename: "{{ keployr_stack }}-apps.yaml"
+kp_gitops_apps_filename: "{{ kp_stack }}-apps.yaml"
 
 ##
 # source full path
 ##
-keployr_src_fullpath: "{{ build_dir }}/{{ keployr_env }}/{{ keployr_stack }}"
-keployr_src_gitops_apps_fullpath: "{{ keployr_src_fullpath }}/{{ keployr_gitops_apps_filename }}"
+kp_src_fullpath: "{{ build_dir }}/{{ kp_env }}/{{ kp_stack }}"
+kp_src_gitops_apps_fullpath: "{{ kp_src_fullpath }}/{{ kp_gitops_apps_filename }}"
 
-keployr_dst_fullpath: "{{ keployr_tmp_project_dir }}/{{ keployr_dst_path }}"
-keployr_dst_gitops_apps_fullpath: "{{ keployr_tmp_project_dir }}/{{ keployr_gitops_apps_dst_path }}"
+kp_dst_fullpath: "{{ kp_tmp_project_dir }}/{{ kp_dst_path }}"
+kp_dst_gitops_apps_fullpath: "{{ kp_tmp_project_dir }}/{{ kp_gitops_apps_dst_path }}"
 
 ##
 # notes MD
 ##
-keployr_note_template: notes.md.j2
-keployr_note_filename: notes.md
-keployr_note_fullpath: "{{ keployr_dst_fullpath }}/{{ keployr_note_filename }}"
+kp_note_template: notes.md.j2
+kp_note_filename: notes.md
+kp_note_fullpath: "{{ kp_dst_fullpath }}/{{ kp_note_filename }}"

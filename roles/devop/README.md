@@ -24,7 +24,7 @@ This task will build a Makefile , a README.md according:
 ### Variables
 
 ```
-keployr_devop:
+kp_devop:
     envs:
     -   name: dev
         dns_suffix: ".cluster-dev.X.ca"

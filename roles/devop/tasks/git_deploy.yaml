@@ -3,43 +3,43 @@
 - name: Check
   ansible.builtin.assert:
     that:
-    - keployr_git_url != ""
-    - keployr_src_fullpath != ""
-    fail_msg: "You must set keployr_git_url, keployr_src_fullpath variables!"
+    - kp_git_url != ""
+    - kp_src_fullpath != ""
+    fail_msg: "You must set kp_git_url, kp_src_fullpath variables!"
 
 - name: Clear dir
   ansible.builtin.file:
-    path: "{{ keployr_tmp_project_dir }}"
+    path: "{{ kp_tmp_project_dir }}"
     state: absent
     force: yes
 
-- name: "clone branch {{ keployr_git_branch }} of {{ keployr_git_url }} to {{ keployr_tmp_project_dir }}"
+- name: "clone branch {{ kp_git_branch }} of {{ kp_git_url }} to {{ kp_tmp_project_dir }}"
   ansible.builtin.shell:
     cmd: |
-      git clone --depth=1 -b {{ keployr_git_branch }} {{ keployr_git_url }} {{ keployr_tmp_project_dir }}
-      cd {{ keployr_tmp_project_dir }}
-      {% if keployr_git_user_email != '' %}git config user.email "{{ keployr_git_user_email }}"{% endif %}
-      {% if keployr_git_user != '' %}git config user.name "{{ keployr_git_user }}"{% endif %}
+      git clone --depth=1 -b {{ kp_git_branch }} {{ kp_git_url }} {{ kp_tmp_project_dir }}
+      cd {{ kp_tmp_project_dir }}
+      {% if kp_git_user_email != '' %}git config user.email "{{ kp_git_user_email }}"{% endif %}
+      {% if kp_git_user != '' %}git config user.name "{{ kp_git_user }}"{% endif %}
   register: clone_ret
 
 - debug: msg="{{ clone_ret.stdout }}"
 
-- name: Clean and create {{ keployr_dst_fullpath }} directory
+- name: Clean and create {{ kp_dst_fullpath }} directory
   ansible.builtin.file:
-    path: "{{ keployr_dst_fullpath }}"
+    path: "{{ kp_dst_fullpath }}"
     state: "{{ item }}"
   loop: ["absent", "directory"]
 
-- name: Exist or create argoCD appSet {{ keployr_dst_gitops_apps_fullpath }} directory
+- name: Exist or create argoCD appSet {{ kp_dst_gitops_apps_fullpath }} directory
   ansible.builtin.file:
-    path: "{{ keployr_dst_gitops_apps_fullpath }}"
+    path: "{{ kp_dst_gitops_apps_fullpath }}"
     state: directory
 
-- name: Copy files from {{ keployr_src_fullpath }}, {{ keployr_src_gitops_apps_fullpath }}
+- name: Copy files from {{ kp_src_fullpath }}, {{ kp_src_gitops_apps_fullpath }}
   ansible.builtin.shell:
     cmd: |
-      [ -d "{{ keployr_src_fullpath }}" ] && cp -r {{ keployr_src_fullpath }}/. {{ keployr_dst_fullpath }}
-      [ -f "{{ keployr_src_gitops_apps_fullpath }}" ] && cp {{ keployr_src_gitops_apps_fullpath }} {{ keployr_dst_gitops_apps_fullpath }}/
+      [ -d "{{ kp_src_fullpath }}" ] && cp -r {{ kp_src_fullpath }}/. {{ kp_dst_fullpath }}
+      [ -f "{{ kp_src_gitops_apps_fullpath }}" ] && cp {{ kp_src_gitops_apps_fullpath }} {{ kp_dst_gitops_apps_fullpath }}/
       exit 0
   register: copy_ret
 
@@ -47,19 +47,19 @@
 - debug: msg="{{ copy_ret.stderr }}"
 
 - name: Add note.md
-  when: keployr_note_template != ""
+  when: kp_note_template != ""
   template:
-    src: "{{ keployr_note_template }}"
-    dest: "{{ keployr_note_fullpath }}"
+    src: "{{ kp_note_template }}"
+    dest: "{{ kp_note_fullpath }}"
 
 - name: Commit & push
   ansible.builtin.shell:
     cmd: |
       git add .
       git status
-      git commit -am "{{ keployr_git_commit_message }}"
-      git push origin {{ keployr_git_branch }}
-    chdir: "{{ keployr_tmp_project_dir }}"
+      git commit -am "{{ kp_git_commit_message }}"
+      git push origin {{ kp_git_branch }}
+    chdir: "{{ kp_tmp_project_dir }}"
   register: push_ret
 
 - debug: msg="{{ push_ret.stdout }}"

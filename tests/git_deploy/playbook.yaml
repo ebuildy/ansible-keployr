@@ -3,16 +3,16 @@
 - hosts: ["localhost"]
 
   vars:
-    keployr_division: ebuildy
-    keployr_stack: keployr
-    keployr_env: dev
+    kp_division: ebuildy
+    kp_stack: keployr
+    kp_env: dev
 
-    keployr_git_branch: main
-    keployr_git_url: git@github.com:ebuildy/keployr-sandbox.git
+    kp_git_branch: main
+    kp_git_url: git@github.com:ebuildy/keployr-sandbox.git
 
-    keployr_src_fullpath: "{{ playbook_dir }}/to_deploy/dev"
+    kp_src_fullpath: "{{ playbook_dir }}/to_deploy/dev"
 
-    keployr_deploy_version: "v0.1.0"
+    kp_deploy_version: "v0.1.0"
 
 
 
