@@ -3,16 +3,13 @@
 - hosts: ["localhost"]
 
   vars:
+    kp_build_dir: "/tmp"
     keployr_division: ebuildy
     keployr_stack: keployr
     keployr_devop:
       envs:
-      - name: dev
-        dns_suffix: ".dev"
-        vars_file: dev.yaml
-      - name: prod
-        dns_suffix: ".prod"
-        vars_file: prod.yaml
+      - dev
+      - prod
       actions:
       - name: Clean
         tags: clean
@@ -44,23 +41,3 @@
     include_role:
       name: "../../roles/devop"
     vars: {}
-
-  - tags: ["always"]
-    block:
-    - ansible.builtin.stat: {path: ./Makefile}
-      register: gMakefile
-    - ansible.builtin.stat: {path: ./match/Makefile}
-      register: mMakefile
-
-  - tags: ["always"]
-    name: assert generated files are ok
-    assert:
-      that:
-      - gMakefile.stat.checksum == mMakefile.stat.checksum
-
-  post_tasks:
-  
-  - tags: ["always"]
-    name: cleaning
-    ansible.builtin.file: { path: "{{ item }}" , state: absent}
-    with_items: ["Makefile", "README.MD"]

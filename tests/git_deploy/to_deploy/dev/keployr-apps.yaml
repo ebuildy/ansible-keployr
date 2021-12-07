@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: argocd
+  name: keployr
+  labels:
+    keployr.io/division: datahub
+    keployr.io/stack: data-lake
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: "XXXXXXX"
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: "dev-steam"
+  source:
+    repoURL: "XXXXXX"
+    targetRevision: "master"
+    path: "XXXXXX"

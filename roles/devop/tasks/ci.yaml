@@ -12,14 +12,21 @@
 #
 ##
 
+- name: "Open env vars file"
+  include_vars:
+    file: "{{ keployr_vars_file_dir }}{{ item }}.{{ keployr_vars_file_extension }}"
+    name: "env_{{ item }}"
+  with_items: "{{ keployr_devop.envs }}"
+
+
 - name: "CI > build README.MD"
-  when: readme_path != ''
+  when: readme_path | default("") | length > 0
   template:
     src: README.MD.j2
     dest: "{{ readme_path }}"
 
 - name: "CI > build Makefile"
-  when: makefile_path != ''
+  when: makefile_path | default("") | length > 0
   template:
     src: Makefile.j2
     dest: "{{ makefile_path }}"

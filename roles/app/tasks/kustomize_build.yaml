@@ -9,18 +9,18 @@
   name: Build kustomization.yaml
   ansible.builtin.template:
     src: "kustomization.yaml.j2"
-    dest: "{{ keployr_build_dir }}/kustomization.yaml"
+    dest: "{{ kp_component_build_dir }}/kustomization.yaml"
     mode: '0644'
 -
   name: Run kustomize
   when: keployr_build_as_manifests
   shell:
-    cmd: kustomize build {{ keployr_build_dir }} -o {{ keployr_build_kustomize_dir }}/all.yaml
+    cmd: kustomize build {{ kp_component_build_dir }} -o {{ keployr_build_kustomize_dir }}/all.yaml
 -
   name: Clean manifest dir
   when: keployr_build_as_manifests
   shell:
-    cmd: "rm {{ keployr_build_manifests_dir }}/*; rm {{ keployr_build_dir }}/kustomization.yaml;"
+    cmd: "rm {{ keployr_build_manifests_dir }}/*; rm {{ kp_component_build_dir }}/kustomization.yaml;"
 -
   name: Explode all.yaml
   when: keployr_build_as_manifests

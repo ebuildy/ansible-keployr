@@ -1,6 +1,21 @@
 ## task: git deploy
 
-Deploy code to git (git clone, commit & push)
+Deploy built artifacts (git clone, commit & push) to a git repository used as gitops source (via argocd).
+
+The repository must respect this file structure:
+
+```
+env_dev
+    stack1
+        gitops_apps
+        service1
+env_prod
+    stack1
+        gitops_apps
+        service1
+```
+
+1 cluster = 1 env
 
 ## task: devop_build
 

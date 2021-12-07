@@ -10,3 +10,5 @@
     src: "argocd_app.yaml.j2"
     dest: "{{ argocd_apps_path }}/{{ keployr_component | lower }}-app.yaml"
     mode: '0644'
+  vars:
+    argocd_source_path: "{{ keployr_build_component_path }}"

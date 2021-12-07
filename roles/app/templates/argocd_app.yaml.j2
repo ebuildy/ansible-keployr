@@ -19,7 +19,7 @@ spec:
   source:
     repoURL: "{{ argocd_repo_url }}"
     targetRevision: "{{ argocd_repo_revision }}"
-    path: "{{ argocd_repo_path }}"
+    path: "{{ argocd_source_path }}"
     {% if keployr_argocd_plugin is defined -%}
     plugin:
       name: {{ keployr_argocd_plugin }}

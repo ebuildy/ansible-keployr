@@ -9,28 +9,26 @@ KEPLOYR_FILE ?= "./src/keployr.yaml"
 KEPLOYR_TAGS ?= ""
 
 # Default env name
-KEPLOYR_ENV ?= {{ keployr_devop.envs[0].name }}
+KEPLOYR_ENV ?= {{ keployr_devop.envs[0] }}
 
-# var files by env name
-{% for env in keployr_devop.envs %}
-KEPLOYR_ENV_{{ env.name }}_VARS_FILE = {{ env.vars_file }}
-{% endfor %}
+comma:= ,
 
 define keployr_fn
-	KEPLOYR_ENV_VARS_FILE=$(KEPLOYR_ENV_$(KEPLOYR_ENV)_VARS_FILE) ansible-playbook ${KEPLOYR_FILE} --tags=$(1) -i localhost,
+	ansible-playbook ${KEPLOYR_FILE} --tags=$(1) -i localhost,
 endef
 
 ###
 # open URL
 ###
 {% for env in keployr_devop.envs %}
+{% set host_suffix = lookup('vars', 'env_' ~ env ).env_ingress_host_suffix %}
 {% for service in keployr_devop.services %}
 {% if service.urls is defined %}
 {% for url in service.urls %}
-.PHONY: {{ mk_rules_prefix }}{{ env.name }}/{{ service.name | lower | replace(' ', '-') }}/url-{{ url.ingress }}
-{{ mk_rules_prefix }}{{ env.name }}/{{ service.name | lower | replace(' ', '-') }}/url-{{ url.ingress }}:
-	@echo "https://{{ url.ingress }}{{ env.dns_suffix}}"
-	open "https://{{ url.ingress }}{{ env.dns_suffix}}"
+.PHONY: {{ mk_rules_prefix }}{{ env }}/{{ service.name | lower | replace(' ', '-') }}/url-{{ url.ingress }}
+{{ mk_rules_prefix }}{{ env }}/{{ service.name | lower | replace(' ', '-') }}/url-{{ url.ingress }}:
+	@echo "https://{{ url.ingress }}{{ host_suffix }}"
+	open "https://{{ url.ingress }}{{ host_suffix }}"
 
 {% endfor %}
 {% endif %}
@@ -46,7 +44,7 @@ endef
 {{ mk_rules_prefix }}{{ action.name | lower | replace(' ', '-') }}: {% if action.actions is defined %}{% for sub_action in action.actions %}{{ mk_rules_svc_prefix }}{{ sub_action | replace('.', '/') }} {% endfor %}{% endif %}
 
 {% if action.tags is defined %}
-	$(call keployr_fn,{{ action.tags }})
+	$(call keployr_fn,"{{ action.tags | replace(',', '$(comma)') }}")
 {% endif %}
 
 {% endfor %}
@@ -60,7 +58,7 @@ endef
 {% for action in service.actions %}
 .PHONY: {{ mk_rules_svc_prefix }}{{ service.name | lower | replace(' ', '-') }}/{{ action.name | lower | replace(' ', '-') }}
 {{ mk_rules_svc_prefix }}{{ service.name | lower | replace(' ', '-') }}/{{ action.name | lower | replace(' ', '-') }}:
-	$(call keployr_fn,{{ action.tags }})
+	$(call keployr_fn,"{{ action.tags | replace(',', '$(comma)') }}")
 
 {% endfor %}
 {% endif %}

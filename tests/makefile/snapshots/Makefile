@@ -11,12 +11,10 @@ KEPLOYR_TAGS ?= ""
 # Default env name
 KEPLOYR_ENV ?= dev
 
-# var files by env name
-KEPLOYR_ENV_dev_VARS_FILE = dev.yaml
-KEPLOYR_ENV_prod_VARS_FILE = prod.yaml
+comma:= ,
 
 define keployr_fn
-	KEPLOYR_ENV_VARS_FILE=$(KEPLOYR_ENV_$(KEPLOYR_ENV)_VARS_FILE) ansible-playbook ${KEPLOYR_FILE} --tags=$(1) -i localhost,
+	ansible-playbook ${KEPLOYR_FILE} --tags=$(1) -i localhost,
 endef
 
 ###
@@ -24,13 +22,13 @@ endef
 ###
 .PHONY: keployr/dev/zeppelin/url-zep
 keployr/dev/zeppelin/url-zep:
-	@echo "https://zep.dev"
-	open "https://zep.dev"
+	@echo "https://zep.dev.cluster.infra"
+	open "https://zep.dev.cluster.infra"
 
 .PHONY: keployr/prod/zeppelin/url-zep
 keployr/prod/zeppelin/url-zep:
-	@echo "https://zep.prod"
-	open "https://zep.prod"
+	@echo "https://zep.prod.cluster.infra"
+	open "https://zep.prod.cluster.infra"
 
 
 ###
@@ -38,7 +36,7 @@ keployr/prod/zeppelin/url-zep:
 ###
 .PHONY: keployr/clean
 keployr/clean: 
-	$(call keployr_fn,clean)
+	$(call keployr_fn,"clean")
 
 .PHONY: keployr/build
 keployr/build: keployr/svc/zeppelin/build keployr/svc/argocd_apps/build 
@@ -49,21 +47,21 @@ keployr/build: keployr/svc/zeppelin/build keployr/svc/argocd_apps/build
 ###
 .PHONY: keployr/svc/devop/makefile
 keployr/svc/devop/makefile:
-	$(call keployr_fn,devop_build,makefile)
+	$(call keployr_fn,"devop_build$(comma)makefile")
 
 .PHONY: keployr/svc/devop/deploy
 keployr/svc/devop/deploy:
-	$(call keployr_fn,git_deploy)
+	$(call keployr_fn,"git_deploy")
 
 
 .PHONY: keployr/svc/zeppelin/build
 keployr/svc/zeppelin/build:
-	$(call keployr_fn,zeppelin,server)
+	$(call keployr_fn,"zeppelin$(comma)server")
 
 
 .PHONY: keployr/svc/argocd_apps/build
 keployr/svc/argocd_apps/build:
-	$(call keployr_fn,argocd_apps)
+	$(call keployr_fn,"argocd_apps")
 
 
 

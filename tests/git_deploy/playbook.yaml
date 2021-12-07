@@ -1,0 +1,26 @@
+---
+
+- hosts: ["localhost"]
+
+  vars:
+    keployr_division: ebuildy
+    keployr_stack: keployr
+    keployr_env: dev
+
+    keployr_git_branch: main
+    keployr_git_url: git@github.com:ebuildy/keployr-sandbox.git
+
+    keployr_src_fullpath: "{{ playbook_dir }}/to_deploy/dev"
+
+    keployr_deploy_version: "v0.1.0"
+
+
+
+  tasks:
+  - name: Deploy via git
+    tags: ["git_deploy"]
+    include_role:
+      name: "../../roles/devop"
+    vars: {}
+
+  post_tasks: []

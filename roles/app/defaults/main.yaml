@@ -45,6 +45,16 @@ keployr_component_fullname: "{{ keployr_division }}-{{ keployr_stack }}-{{ keplo
 
 keployr_stack_fullname: "{{ keployr_division }}-{{ keployr_stack }}"
 
+##
+# relative stack path
+##
+keployr_stack_path: "{{ keployr_env }}/{{ keployr_stack }}"
+
+##
+# relative component path
+##
+keployr_build_component_path: "{{ keployr_stack_path }}/{{ keployr_component_dir }}"
+
 keployr_fullname: "{{ (keployr_component == '') | ternary(keployr_stack_fullname, keployr_component_fullname) }}"
 
 ################################################################################
@@ -59,8 +69,13 @@ keployr_argocd_enabled: false
 ##
 # Constants
 ##
-argocd_apps_dirname: argocd-apps
-argocd_apps_path: "{{ keployr_project_build_path }}/{{ argocd_apps_dirname }}"
+
+##
+# apps definition gitops dirname
+##
+keployr_gitops_apps_dirname: gitops-apps
+
+argocd_apps_path: "{{ keployr_project_build_path }}/{{ keployr_gitops_apps_dirname }}"
 argocd_appset_filename: "{{ keployr_stack }}-apps.yaml"
 argocd_appset_path: "{{ keployr_project_build_path }}/{{ argocd_appset_filename }}"
 
@@ -70,12 +85,8 @@ argocd_appset_path: "{{ keployr_project_build_path }}/{{ argocd_appset_filename 
 argocd_project: ""
 argocd_repo_url: ""
 argocd_repo_revision: develop
-argocd_repo_path: "{{ gitops_path_prefix }}/{{ keployr_component }}"
 argocd_app_name: "{{ keployr_fullname }}"
 argocd_app_namespace: argocd
-
-# path begin by
-gitops_path_prefix: "{{ keployr_stack }}"
 
 ################################################################################
 ## Helm
@@ -133,17 +144,17 @@ keployr_build_as_manifests_single_file: false
 ##
 # where file are generated
 ##
-keployr_build_dir: "{{ build_dir }}/{{ keployr_component }}"
+kp_component_build_dir: "{{ kp_build_dir }}/{{ keployr_component }}"
 
 ##
 # where magic happen (kustomize / helm generation if needed)
 ##
-keployr_build_helm_dir: "{{ keployr_build_dir }}/_wip_helm"
+keployr_build_helm_dir: "{{ kp_component_build_dir }}/_wip_helm"
 
 ##
 # where magic happen (kustomize / helm generation if needed)
 ##
-keployr_build_manifests_dir: "{{ keployr_build_dir }}/_wip_manifests"
+keployr_build_manifests_dir: "{{ kp_component_build_dir }}/_wip_manifests"
 
 ##
 # where extra manifest are located.
@@ -153,7 +164,7 @@ keployr_src_manifests_dir: "{{ keployr_component_path }}/extra_manifests"
 ##
 # for kustomize
 ##
-keployr_build_kustomize_dir: "{{ keployr_build_dir }}/_wip_kustomize"
+keployr_build_kustomize_dir: "{{ kp_component_build_dir }}/_wip_kustomize"
 
 ##
 # kubernetes namespace
@@ -161,4 +172,4 @@ keployr_build_kustomize_dir: "{{ keployr_build_dir }}/_wip_kustomize"
 keployr_k8s_namespace: "default"
 
 
-k8s_manifest_file: "{{ '%s/%02d-%s-%s.yaml' % (keployr_build_dir, keployr_k8s_gen_list_counter | int, k8s_name | lower, k8s_kind | lower) }}"
+k8s_manifest_file: "{{ '%s/%02d-%s-%s.yaml' % (kp_component_build_dir, keployr_k8s_gen_list_counter | int, k8s_name | lower, k8s_kind | lower) }}"

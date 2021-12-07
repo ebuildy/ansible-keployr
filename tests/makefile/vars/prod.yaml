@@ -1,0 +1,3 @@
+env_name: prod
+
+env_ingress_host_suffix: .prod.cluster.infra

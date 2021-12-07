@@ -1,11 +1,11 @@
 ---
 
-- name: "Check build dir {{ keployr_build_dir }} exists"
-  file: path={{ keployr_build_dir }} state="directory"
+- name: "Check build dir {{ kp_component_build_dir }} exists"
+  file: path={{ kp_component_build_dir }} state="directory"
 
 - name: Remove component build dir
   ansible.builtin.file:
-    path: "{{ keployr_build_dir }}"
+    path: "{{ kp_component_build_dir }}"
     state: absent
 
 - name: Prepare WIP folders
