@@ -1,0 +1,13 @@
+---
+
+- name: Helm chart
+  include_role:
+    name: "../../roles/app"
+    apply: { tags: ["always"] }
+  tags: ["always"]
+  vars:
+    keployr_argocd_enabled: true
+    keployr_build_as_manifests: false
+    keployr_helm_values:
+      hello: world
+    keployr_helm_charts: []

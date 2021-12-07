@@ -1,0 +1,15 @@
+---
+
+- hosts: ["localhost"]
+
+  vars:
+    keployr_division: ebuildy
+    keployr_stack: keployr
+    keployr_env: dev
+
+    kp_build_dir: "{{ lookup('env', 'PWD')/build"
+
+  tasks:
+  - name: Service HTTP
+    tags: ["always"]
+    include_tasks: ./svc_http/tasks.yaml
