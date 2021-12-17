@@ -18,8 +18,10 @@
     cmd: |
       git clone --depth=1 -b {{ kp_git_branch }} {{ kp_git_url }} {{ kp_tmp_project_dir }}
       cd {{ kp_tmp_project_dir }}
-      {% if kp_git_user_email != '' %}git config user.email "{{ kp_git_user_email }}"{% endif %}
-      {% if kp_git_user != '' %}git config user.name "{{ kp_git_user }}"{% endif %}
+      {% if kp_git_user_email != '' %}git config user.email "{{ kp_git_user_email }}"
+      {% endif %}
+      {% if kp_git_user != '' %}git config user.name "{{ kp_git_user }}"
+      {% endif %}
   register: clone_ret
 
 - debug: msg="{{ clone_ret.stdout }}"
