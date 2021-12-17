@@ -3,15 +3,15 @@
 - name: Check dir exist
   tags: ["always"]
   ansible.builtin.file:
-    path: "{{ argocd_appset_path | dirname }}"
+    path: "{{ kp_gitops_apps_build_path | dirname }}"
     state: directory
 
 - name: Build argoCD app.yaml
   tags: ["always"]
   ansible.builtin.template:
     src: "argocd_app.yaml.j2"
-    dest: "{{ argocd_appset_path }}"
+    dest: "{{ kp_gitops_apps_build_path }}"
     mode: '0644'
   vars:
-    argocd_source_path: "{{ kp_stack_build_dir }}"
+    argocd_source_path: "{{ kp_stack_gitops_path }}/{{ kp_gitops_apps_dirname }}"
     argocd_app_name: "{{ kp_fullname }}-apps"

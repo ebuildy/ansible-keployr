@@ -1,7 +1,9 @@
+---
+
 ##
-# default build dir
+# working dir to build stuff
 ##
-kp_build_dir: "{{ working_dir }}"
+kp_build_dir: "./build/{{ kp_env }}"
 
 ##
 # default temp dir
@@ -13,8 +15,6 @@ gitlab_ci_yaml_path: "{{ kp_build_dir }}/.gitlab-ci.yml"
 readme_path: "{{ kp_build_dir }}/README.MD"
 makefile_path: "{{ kp_build_dir }}/Makefile"
 
-project_version: "{{ lookup('file', working_dir ~ '/VERSION') }}"
-
 ##
 # default extension for vars_file
 ##
@@ -24,12 +24,6 @@ kp_vars_file_extension: "yaml"
 # dir for vars_file
 ##
 kp_vars_file_dir: ""
-
-##
-# artifacts source root dir
-##
-working_dir: "{{ lookup('env', 'PWD') }}"
-
 
 ##
 # Full git URL (with scheme / auth credentials)
@@ -75,10 +69,12 @@ kp_gitops_apps_dst_path: "{{ kp_env }}/{{ kp_gitops_apps_dirname }}"
 kp_gitops_apps_filename: "{{ kp_stack }}-apps.yaml"
 
 ##
-# source full path
+# source (aka build)
 ##
-kp_src_fullpath: "{{ build_dir }}/{{ kp_env }}/{{ kp_stack }}"
-kp_src_gitops_apps_fullpath: "{{ kp_src_fullpath }}/{{ kp_gitops_apps_filename }}"
+
+kp_gitops_apps_file: "{{ kp_stack }}-apps.yaml"
+kp_gitops_apps_build_path: "{{ kp_build_dir }}/{{ kp_gitops_apps_file }}"
+
 
 kp_dst_fullpath: "{{ kp_tmp_project_dir }}/{{ kp_dst_path }}"
 kp_dst_gitops_apps_fullpath: "{{ kp_tmp_project_dir }}/{{ kp_gitops_apps_dst_path }}"

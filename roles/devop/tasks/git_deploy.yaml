@@ -4,8 +4,8 @@
   ansible.builtin.assert:
     that:
     - kp_git_url != ""
-    - kp_src_fullpath != ""
-    fail_msg: "You must set kp_git_url, kp_src_fullpath variables!"
+    - kp_build_dir != ""
+    fail_msg: "You must set kp_git_url, kp_build_dir variables!"
 
 - name: Clear dir
   ansible.builtin.file:
@@ -35,11 +35,11 @@
     path: "{{ kp_dst_gitops_apps_fullpath }}"
     state: directory
 
-- name: Copy files from {{ kp_src_fullpath }}, {{ kp_src_gitops_apps_fullpath }}
+- name: Copy files from {{ kp_build_dir }}, {{ kp_gitops_apps_build_path }}
   ansible.builtin.shell:
     cmd: |
-      [ -d "{{ kp_src_fullpath }}" ] && cp -r {{ kp_src_fullpath }}/. {{ kp_dst_fullpath }}
-      [ -f "{{ kp_src_gitops_apps_fullpath }}" ] && cp {{ kp_src_gitops_apps_fullpath }} {{ kp_dst_gitops_apps_fullpath }}/
+      [ -d "{{ kp_build_dir }}" ] && cp -r {{ kp_build_dir }}/. {{ kp_dst_fullpath }}
+      [ -f "{{ kp_gitops_apps_build_path }}" ] && cp {{ kp_gitops_apps_build_path }} {{ kp_dst_gitops_apps_fullpath }}/
       exit 0
   register: copy_ret
 

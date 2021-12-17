@@ -10,7 +10,7 @@
     kp_git_branch: main
     kp_git_url: git@github.com:ebuildy/keployr-sandbox.git
 
-    kp_src_fullpath: "{{ playbook_dir }}/to_deploy/dev"
+    kp_build_dir: "{{ playbook_dir }}/to_deploy/dev"
 
     kp_deploy_version: "v0.1.0"
 

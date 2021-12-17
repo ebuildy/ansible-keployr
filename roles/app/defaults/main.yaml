@@ -35,9 +35,9 @@ kp_component: ""
 kp_stack_fullname: "{{ kp_division }}-{{ kp_stack }}"
 
 ##
-# relative stack path
+# gitops repository path to stack
 ##
-kp_stack_build_dir: "{{ kp_env }}/{{ kp_stack }}"
+kp_stack_gitops_path: "{{ kp_env }}/{{ kp_stack }}"
 
 ##
 # full path of component source
@@ -47,7 +47,7 @@ kp_component_src_dir: "./{{ kp_component | lower | lower }}"
 ##
 # where file are generated
 ##
-kp_component_build_dir: "{{ kp_stack_build_dir }}/{{ kp_component }}"
+kp_component_build_dir: "{{ kp_build_dir }}/{{ kp_component }}"
 
 ##
 # for helm chart definition
@@ -60,9 +60,9 @@ kp_component_version: "v0.0.1"
 kp_component_fullname: "{{ kp_division }}-{{ kp_stack }}-{{ kp_component }}"
 
 ##
-# relative component path
+# gitops repository path to component
 ##
-kp_component_gitops_path: "{{ kp_stack_build_dir }}/{{ kp_component | lower }}"
+kp_component_gitops_path: "{{ kp_stack_gitops_path }}/{{ kp_component | lower }}"
 
 kp_fullname: "{{ (kp_component == '') | ternary(kp_stack_fullname, kp_component_fullname) }}"
 
@@ -85,8 +85,8 @@ kp_argocd_enabled: false
 kp_gitops_apps_dirname: gitops-apps
 
 kp_build_gitops_apps_dir: "{{ kp_build_dir }}/{{ kp_gitops_apps_dirname }}"
-argocd_appset_filename: "{{ kp_stack }}-apps.yaml"
-argocd_appset_path: "{{ kp_build_dir }}/{{ argocd_appset_filename }}"
+kp_gitops_apps_file: "{{ kp_stack }}-apps.yaml"
+kp_gitops_apps_build_path: "{{ kp_build_dir }}/{{ kp_gitops_apps_file }}"
 
 ##
 # Template application manifest
