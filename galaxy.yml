@@ -1,6 +1,6 @@
 namespace: ebuildy
 name: keployr
-version: 1.0.2
+version: 1.0.3
 readme: README.md
 authors:
 - Thomas Decaux <ebuildy@gmail.com>
