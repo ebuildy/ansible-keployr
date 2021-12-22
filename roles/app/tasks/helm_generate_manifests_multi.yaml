@@ -3,6 +3,7 @@
 -
   name: Explode all.yaml
   loop: "{{ lookup('file', kp_build_helm_dir ~ '/all.yaml') | from_yaml_all }}"
+  when: item.metadata.name is defined
   copy:
     dest: "{{ kp_build_manifests_dir }}/{{ '%s-%s.yaml' % (item.metadata.name | lower, item.kind | lower) }}"
     content: "{{ item | to_nice_yaml }}"

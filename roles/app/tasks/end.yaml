@@ -6,8 +6,7 @@
     cmd: "mv {{ kp_build_manifests_dir }}/* {{ kp_component_build_dir }}/"
 
 - name: Copy Helm resources
-  when: not kp_build_as_manifests
-  ignore_errors: yes
+  when: not kp_build_as_manifests and (kp_helm_charts|count > 0 or kp_helm_values|count > 0)
   shell:
     cmd: "mv {{ kp_build_helm_dir }}/* {{ kp_component_build_dir }}/"
 
