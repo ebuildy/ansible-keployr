@@ -1,0 +1,86 @@
+---
+
+- tags: ["always"]
+  set_fact:
+    api_headers: &api_headers
+      Authorization: "Bearer {{ lookup('env', 'ARGO_TOKEN') }}"
+
+- name: refresh all applications
+  register: _result
+  uri:
+    url: "{{ argocd_url }}/api/v1/applications?refresh=true&project={{ argocd_project }}"
+    method: GET
+    headers: "{{ api_headers }}"
+  tags: ["never", "refresh", "list"]
+
+- name: transform data
+  vars:
+    buffer: |
+      {% for item in _result.json['items'] %}
+      {%- set app = item.metadata.name -%}
+      {%- if app.startswith(kp_division ~ '-' ~ kp_stack)  -%}
+      {{ app }}:
+        url: {{ argocd_url }}/applications/{{ app }}
+        sync: {{ item.status.sync.status }}
+        health: {{ item.status.health.status }}
+      {% endif %}
+      {% endfor %}
+    buffer_to_sync: |
+      {% for item in _result.json['items'] %}
+      {%- set app = item.metadata.name -%}
+      {%- if app.startswith(kp_division ~ '-' ~ kp_stack) and item.status.sync.status == "OutOfSync" -%}
+      - {{ app }}
+      {% endif %}
+      {% endfor %}
+  set_fact:
+    argocd_apps_list: "{{ buffer | from_yaml }}"
+    argocd_apps_to_sync: "{{ buffer_to_sync | from_yaml }}"
+  tags: ["never", "refresh", "list"]
+
+- name: list
+  tags: ["never", "list"]      
+  debug: var=argocd_apps_list
+
+- name: apps to sync
+  tags: ["never", "sync"]      
+  debug: var=argocd_apps_to_sync
+
+- name: "sync argocd application {{ async_item }}"
+  tags: ["never", "sync"]
+  register: async_results
+  uri:
+    url: "{{ argocd_url }}/api/v1/applications/{{ async_item }}/sync"
+    method: POST
+    headers: "{{ api_headers }}"
+  async: 45
+  poll: 0
+  loop: "{{ argocd_apps_to_sync }}"
+  loop_control:
+    loop_var: "async_item"
+
+- name: get results
+  tags: ["never", "sync"]
+  block:
+  - name: Check sync status
+    async_status:
+      jid: "{{ async_result_item.ansible_job_id }}"
+    loop: "{{ async_results.results }}"
+    loop_control:
+      loop_var: "async_result_item"
+    register: async_poll_results
+    until: async_poll_results.finished
+    retries: 30
+
+  #- debug: var=async_poll_results
+
+  - vars:
+      buffer: |
+        {% for result in async_poll_results.results %}
+          {{ result.json.metadata.name }}:
+            url: {{ argocd_url }}/applications/{{ result.json.metadata.name }}
+            sync: {{ result.json.status.sync.status }}
+        {% endfor %}
+    set_fact:
+      stdout : "{{ buffer | from_yaml }}"
+
+  - debug: var=stdout

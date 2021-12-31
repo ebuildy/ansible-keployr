@@ -66,3 +66,4 @@
 
 - debug: msg="{{ push_ret.stdout }}"
 - debug: msg="{{ push_ret.stderr }}"
+

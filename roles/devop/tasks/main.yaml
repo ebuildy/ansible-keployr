@@ -7,3 +7,7 @@
 - name: Deploy to git project
   tags: ["never", "git_deploy"]
   import_tasks: git_deploy.yaml
+
+- name: Play with argocd
+  tags: ["never", "argocd_api"]
+  import_tasks: argocd_api.yaml
