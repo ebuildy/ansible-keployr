@@ -3,7 +3,7 @@
 - tags: ["always"]
   set_fact:
     api_headers: &api_headers
-      Authorization: "Bearer {{ lookup('env', 'ARGO_TOKEN') }}"
+      Authorization: "Bearer {{ argocd_token }}"
 
 - name: refresh all applications
   register: _result
