@@ -33,7 +33,7 @@
   register: extra_manifests_stats
 
 - when: extra_manifests_stats.stat.exists
-  ansible.builtin.include_tasks: extra_manifests.yaml
+  ansible.builtin.include_tasks: extra_manifests_build.yaml
 
 ##
 # kustomize
